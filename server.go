@@ -38,9 +38,14 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func retrieve(w http.ResponseWriter, _ *http.Request) {
+	// TODO: Getting the value from the id that was returned in the generate method
+}
+
 func server() {
 	log.Println("Server started!")
 	http.HandleFunc("/ping", ping)
 	http.HandleFunc("/generate", generate)
+	http.HandleFunc("/retrieve", retrieve)
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
