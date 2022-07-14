@@ -20,11 +20,11 @@ func ping(w http.ResponseWriter, _ *http.Request) {
 }
 
 func generate(w http.ResponseWriter, r *http.Request) {
+	valLength := 0
 	valType := r.URL.Query().Get("type")
 	vl := r.URL.Query().Get("length")
-	valLength, err := strconv.Atoi(vl)
-	if err != nil {
-		log.Panic(err)
+	if vl != "" {
+		valLength, _ = strconv.Atoi(vl)
 	}
 	val := valueGeneration(valType, valLength)
 	v, err := json.Marshal(val)

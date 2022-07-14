@@ -17,9 +17,14 @@ var src = rand.NewSource(time.Now().UnixNano())
 
 func valueGeneration(valType string, valLength int) string {
 	var symbols string
-	n := src.Int63()
-	for n > 8 {
-		n /= 3
+	if valLength == 0 {
+		valLength = int(src.Int63())
+		for valLength > 66 {
+			valLength /= 3
+		}
+		for valLength < 4 {
+			valLength *= 3
+		}
 	}
 	switch valType {
 	case "num":
@@ -29,11 +34,11 @@ func valueGeneration(valType string, valLength int) string {
 	case "alp":
 		symbols = letters + numbers
 	}
-	value := generator(n, symbols)
+	value := generator(valLength, symbols)
 	return value
 }
 
-func generator(n int64, symbols string) string {
+func generator(n int, symbols string) string {
 	b := make([]byte, n)
 	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
 	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
