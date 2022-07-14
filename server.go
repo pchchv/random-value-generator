@@ -1,19 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
 )
 
 func ping(w http.ResponseWriter, _ *http.Request) {
-	r, err := json.Marshal("Flight Service. Version 0.0.1")
-	if err != nil {
-		log.Panic(err)
-	}
 	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(r)
+	_, err := w.Write(getJSON("", "Random Value Service. Version 0.1"))
 	if err != nil {
 		log.Panic(err)
 	}
@@ -27,12 +22,11 @@ func generate(w http.ResponseWriter, r *http.Request) {
 		valLength, _ = strconv.Atoi(vl)
 	}
 	val := valueGeneration(valType, valLength)
-	v, err := json.Marshal(val)
-	if err != nil {
-		log.Panic(err)
-	}
+	v := getJSON("value: ", val)
+	id := getJSON("id: ", toDB(val))
+	v = append(v, id...)
 	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(v)
+	_, err := w.Write(v)
 	if err != nil {
 		log.Panic(err)
 	}
