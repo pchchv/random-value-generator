@@ -15,3 +15,9 @@ example: http://localhost:8080/generate?type=alp&length=20
 ```
 /retrieve — Getting the value from the id that was returned in the generate method
 ```
+### Params for ```.env``` file
+```
+MONGO=mongodb://localhost:27017
+DATABASE=random_values
+COLLECTION=values
+```

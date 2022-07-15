@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"math/rand"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
@@ -16,6 +20,22 @@ const (
 )
 
 var src = rand.NewSource(time.Now().UnixNano())
+var collection *mongo.Collection
+
+func init() {
+	// Load values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Panic("No .env file found")
+	}
+}
+
+func getEnvValue(v string) string {
+	value, exist := os.LookupEnv(v)
+	if !exist {
+		log.Panicf("Value %v does not exist", v)
+	}
+	return value
+}
 
 func valueGeneration(valType string, valLength int) string {
 	var symbols string
@@ -82,4 +102,5 @@ func getJSON(pre string, str string) []byte {
 
 func main() {
 	server()
+	db()
 }
