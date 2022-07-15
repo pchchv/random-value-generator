@@ -89,6 +89,11 @@ func toDB(value string) string {
 	return fmt.Sprint(result.InsertedID)
 }
 
+func fromDB(id string) string {
+	// TODO: Get value from database by id
+	return id
+}
+
 func getJSON(pre string, str string) []byte {
 	var res []byte
 	s, err := json.MarshalIndent(str, "\t", "\t")

@@ -32,8 +32,15 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func retrieve(w http.ResponseWriter, _ *http.Request) {
-	// TODO: Getting the value from the id that was returned in the generate method
+func retrieve(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	value := fromDB(id)
+	v := getJSON("value: ", value)
+	w.Header().Set("Content-Type", "application/json")
+	_, err := w.Write(v)
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func server() {
