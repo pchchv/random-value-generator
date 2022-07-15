@@ -90,8 +90,18 @@ func toDB(value string) string {
 }
 
 func fromDB(id string) string {
-	// TODO: Get value from database by id
-	return id
+	res, err := collection.Find(context.TODO(), bson.M{"id": id})
+	if err != nil {
+		log.Panic(err)
+	}
+	var ids []bson.M
+	if err = res.All(context.TODO(), &ids); err != nil {
+		log.Panic(err)
+	}
+	if ids == nil {
+		return "id not found"
+	}
+	return fmt.Sprintf("%v", ids[0]["value"])
 }
 
 func getJSON(pre string, str string) []byte {
