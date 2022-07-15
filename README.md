@@ -1,5 +1,12 @@
-# HTTP service for generating random values.
-
+# HTTP service for generating random values
+### Running the application
+```
+go run .
+```
+## Running tests (app must be running)
+```
+go test
+```
 ## HTTP Methods
 ```
 /generate — Generation of a random value and its identifier
