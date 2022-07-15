@@ -95,3 +95,34 @@ func TestLoadGenerate(t *testing.T) {
 	metrics.Close()
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
 }
+
+func TestRetrieve(t *testing.T) {
+	res, err := http.Get("http://127.0.0.1:8080/retrieve?id=") // TODO: Add id
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res.Body.Close()
+}
+
+func TestLoadRetrieve(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "GET",
+		URL:    "http://localhost:8080/retrieve?id=", // TODO: Add id
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
