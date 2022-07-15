@@ -1,13 +1,16 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
 	"time"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -78,9 +81,12 @@ func generator(n int, symbols string) string {
 }
 
 func toDB(value string) string {
-	var id string
-	id = "5454811"
-	return id
+	v := bson.D{{Key: "value", Value: value}}
+	result, err := collection.InsertOne(context.TODO(), v)
+	if err != nil {
+		log.Panic(err)
+	}
+	return fmt.Sprint(result.InsertedID)
 }
 
 func getJSON(pre string, str string) []byte {
