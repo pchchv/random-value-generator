@@ -33,9 +33,14 @@ func generate(w http.ResponseWriter, r *http.Request) {
 }
 
 func retrieve(w http.ResponseWriter, r *http.Request) {
+	var v []byte
 	id := r.URL.Query().Get("id")
 	value := fromDB(id)
-	v := getJSON("value: ", value)
+	if value == "id not found" {
+		v = getJSON("Error: ", "Id not found")
+	} else {
+		v = getJSON("value: ", value)
+	}
 	w.Header().Set("Content-Type", "application/json")
 	_, err := w.Write(v)
 	if err != nil {
